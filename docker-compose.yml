@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    container_name: spor_salonu_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: spor
+      POSTGRES_PASSWORD: spor_dev_pw
+      POSTGRES_DB: spor_salonu
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spor -d spor_salonu"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db_data:

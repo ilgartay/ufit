@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "uFIT",
+    "slug": "ufit-mobil",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "sporsalonu",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sporsalonu.uye"
+    },
+    "android": {
+      "package": "com.sporsalonu.uye"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router", "expo-secure-store"],
+    "extra": {
+      "apiUrl": "http://192.168.1.7:3000"
+    }
+  }
+}

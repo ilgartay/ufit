@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# next
+backend/.next/
+backend/out/
+
+# expo
+mobile/.expo/
+mobile/dist/
+mobile/web-build/
+
+# env
+.env
+.env*.local
+backend/.env
+
+# misc
+.DS_Store
+*.log
+npm-debug.log*
