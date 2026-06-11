@@ -94,6 +94,30 @@ Open with Expo Go by scanning the QR. Log in with the TCKN + temporary password 
 - **SMS password delivery** — temporary password is sent to the member's phone on creation / reset. `console` mode logs it (dev); `netgsm` / `twilio` for real delivery. The password is still shown once in the panel as a fallback.
 - **Auto-toggling direction** — each granted scan alternates `IN`/`OUT`.
 
+### SMS setup — Netgsm (Turkey)
+
+1. In `backend/.env`, set `SMS_PROVIDER="netgsm"` and fill in your Netgsm credentials:
+   ```env
+   SMS_PROVIDER="netgsm"
+   NETGSM_USERCODE="your-usercode"
+   NETGSM_PASSWORD="your-password"
+   NETGSM_MSGHEADER="APPROVED_SENDER"   # your approved sender name/header
+   NETGSM_APPKEY=""                      # optional API key, if defined on your account
+   ```
+   These stay in your local `.env` and are **never committed** (gitignored).
+2. Test the connection without creating a member:
+   ```bash
+   npm run test:sms -- 05551234567 "uFIT test"
+   ```
+   Success prints `✓`. Netgsm error codes are mapped to readable messages
+   (e.g. `30` → invalid credentials/IP, `40` → undefined sender header).
+3. From then on, creating a member or resetting a password automatically
+   texts the temporary password. With `SMS_PROVIDER="console"` (default) no real
+   SMS is sent — the message is written to the server log instead.
+
+> Twilio is also supported: set `SMS_PROVIDER="twilio"` with `TWILIO_ACCOUNT_SID`,
+> `TWILIO_AUTH_TOKEN`, and `TWILIO_FROM`.
+
 ## API endpoints (summary)
 
 | Method | Path | Auth | Description |

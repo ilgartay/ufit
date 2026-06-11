@@ -66,14 +66,32 @@ export function buildPasswordSms(
 
 // ---- Sağlayıcı implementasyonları ----
 
+/** Netgsm yanıt kodlarının okunabilir açıklamaları (resmi dokümana göre). */
+const NETGSM_CODES: Record<string, string> = {
+  "00": "Başarılı",
+  "01": "Başarılı (1 numara hatalı)",
+  "02": "Başarılı (mesaj başlığı sistemde kayıtlı değil — yine de gönderildi)",
+  "20": "Mesaj metni hatalı veya karakter sınırı aşıldı",
+  "30": "Geçersiz kullanıcı adı/şifre, API erişimi yok veya IP kısıtlaması",
+  "40": "Mesaj başlığı (gönderici adı) sistemde tanımlı değil",
+  "50": "IYS kontrollü gönderim hatası (alıcı/IYS izni)",
+  "51": "IYS marka bilgisi eksik",
+  "70": "Hatalı veya eksik parametre",
+  "80": "Gönderim sınırı aşıldı",
+  "85": "Mükerrer gönderim sınırı (aynı numaraya 1 dk içinde 20+ istek)",
+};
+
 async function sendViaNetgsm(phone: string, message: string): Promise<SmsResult> {
   const usercode = process.env.NETGSM_USERCODE;
   const password = process.env.NETGSM_PASSWORD;
-  const header = process.env.NETGSM_MSGHEADER; // onaylı başlık
+  const header = process.env.NETGSM_MSGHEADER; // onaylı gönderici başlığı
+  const appkey = process.env.NETGSM_APPKEY; // opsiyonel API anahtarı
   if (!usercode || !password || !header) {
-    throw new Error("Netgsm ortam değişkenleri eksik");
+    throw new Error(
+      "Netgsm ortam değişkenleri eksik (NETGSM_USERCODE, NETGSM_PASSWORD, NETGSM_MSGHEADER)"
+    );
   }
-  // Netgsm numarayı başında 0 olmadan, ülke kodlu bekler (90...)
+  // Netgsm numarayı başında 0/+ olmadan, ülke kodlu bekler (90...)
   const gsmno = phone.replace(/^\+/, "");
   const params = new URLSearchParams({
     usercode,
@@ -82,18 +100,25 @@ async function sendViaNetgsm(phone: string, message: string): Promise<SmsResult>
     message,
     msgheader: header,
   });
+  if (appkey) params.set("appkey", appkey);
+
   const res = await fetch("https://api.netgsm.com.tr/sms/send/get/", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString(),
   });
-  const text = await res.text();
-  // Netgsm başarıda "00 <jobid>" veya "01 <jobid>" döner; diğerleri hata kodu.
-  const code = text.trim().split(/\s+/)[0];
+  if (!res.ok) {
+    throw new Error(`Netgsm HTTP ${res.status}`);
+  }
+
+  const text = (await res.text()).trim();
+  // Başarıda "00 <jobid>" / "01 <jobid>" / "02 <jobid>" döner; diğerleri hata kodu.
+  const code = text.split(/\s+/)[0];
   if (code === "00" || code === "01" || code === "02") {
     return { ok: true, provider: "netgsm" };
   }
-  throw new Error(`Netgsm hata kodu: ${text.trim()}`);
+  const detail = NETGSM_CODES[code] || "Bilinmeyen hata";
+  throw new Error(`Netgsm hata ${code}: ${detail}`);
 }
 
 async function sendViaTwilio(phone: string, message: string): Promise<SmsResult> {
