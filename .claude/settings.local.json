@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pg_isready)",
+      "Bash(docker info *)",
+      "Bash(timeout 8 docker ps)"
+    ]
+  }
+}
