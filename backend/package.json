@@ -12,7 +12,8 @@
     "prisma:deploy": "prisma migrate deploy",
     "seed": "tsx prisma/seed.ts",
     "create-admin": "tsx prisma/create-admin.ts",
-    "test:tckn": "tsx src/lib/tckn.test.ts"
+    "test:tckn": "tsx src/lib/tckn.test.ts",
+    "test:sms": "tsx scripts/send-test-sms.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
