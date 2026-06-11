@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 999,
   },
-  btnActive: { backgroundColor: "#ffedd5" },
+  btnActive: { backgroundColor: "#e0f2fe" },
   flag: { fontSize: 15 },
   label: { fontSize: 12, fontWeight: "600", color: colors.muted },
   labelActive: { color: colors.primaryDark },

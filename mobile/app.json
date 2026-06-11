@@ -4,19 +4,30 @@
     "slug": "ufit-mobil",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "sporsalonu",
+    "scheme": "ufit",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sporsalonu.uye"
+      "bundleIdentifier": "com.ufit.app"
     },
     "android": {
-      "package": "com.sporsalonu.uye"
+      "package": "com.ufit.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0ea5e9"
+      }
     },
     "web": {
       "bundler": "metro",
-      "output": "static"
+      "output": "static",
+      "favicon": "./assets/icon.png"
     },
     "plugins": ["expo-router", "expo-secure-store"],
     "extra": {

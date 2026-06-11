@@ -1,4 +1,4 @@
-# 🟠 uFIT — Gym QR Access System
+# 🔵 uFIT — Gym QR Access System
 
 A QR-integrated gym **member access & management** system.
 
