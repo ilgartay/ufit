@@ -5,6 +5,7 @@ node_modules/
 # next
 backend/.next/
 backend/out/
+*.tsbuildinfo
 
 # expo
 mobile/.expo/
